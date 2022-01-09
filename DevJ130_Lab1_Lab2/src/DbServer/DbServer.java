@@ -11,7 +11,9 @@ public class DbServer implements IDbService{
 //        System.out.println("url = " +settings.getUrl());
         System.out.println("url = " +settings.getValue(Settings.URL));
         System.out.println("user = " +settings.getValue(Settings.USER));
-        System.out.println("psw = " +settings.getValue(Settings.PSW));  
+        System.out.println("psw = " +settings.getValue(Settings.PSW));
+        
+        
         
         System.out.println("-------------------------------------------------");
         
