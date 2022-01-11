@@ -27,6 +27,8 @@ public class Authors {
         this.notes = notes;
     }
     
+    
+    
     public static List<Authors> getAuthors(){
        List<Authors> list = new ArrayList<>();
        Settings settings = new Settings();
