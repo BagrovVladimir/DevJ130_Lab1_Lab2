@@ -20,15 +20,15 @@ public class Documents {
     private final int document_id;
     private String title;
     private String text;
-    private Date date;
+    private String date;
     private int author_id;
 
-    public Documents(int document_id, String title, String text, int author_id) {
-        this(document_id, title, text,
-                new Date(System.currentTimeMillis()), author_id);
-    }
+//    public Documents(int document_id, String title, String text, int author_id) {
+//        this(document_id, title, text,
+//                new Date(System.currentTimeMillis()), author_id);
+//    }
 
-    public Documents(int document_id, String title, String text, Date date, int author_id) {
+    public Documents(int document_id, String title, String text, String date, int author_id) {
         this.document_id = document_id;
         this.title = title;
         this.text = text;
@@ -52,7 +52,7 @@ public class Documents {
                         rs.getInt(1), 
                         rs.getString(2), 
                         rs.getString(3), 
-                        rs.getDate(4), 
+                        rs.getString(4), 
                         rs.getInt(5));
                 list.add(doc);
             }
@@ -82,11 +82,11 @@ public class Documents {
         this.text = text;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

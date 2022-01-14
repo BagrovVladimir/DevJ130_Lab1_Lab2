@@ -26,12 +26,12 @@ public class DbServer implements IDbService{
         System.out.println("psw = " +settings.getValue(Settings.PSW));
         
         Authors pushkina = new Authors(4, "Mariya ushkina", "Songs");
-        Documents pushkinaDoc = new Documents(5, "Hero of the road", "Song and poems", new Date(995, 6, 5), 4);
+        Documents pushkinaDoc = new Documents(5, "Hero of the road", "Song and poems", "1995-06-05", 4);
         
-//        try {
-//            dbServer.addAuthor(pushkina);
-//        } catch (DocumentException ex) {
-//            System.out.println("Error: "+ex.getMessage());}
+        try {
+            dbServer.addAuthor(pushkina);
+        } catch (DocumentException ex) {
+            System.out.println("Error: "+ex.getMessage());}
         
         try {
             dbServer.addDocument(pushkinaDoc, pushkina);
@@ -61,6 +61,7 @@ public class DbServer implements IDbService{
 
     @Override
     public boolean addAuthor(Authors author) throws DocumentException {
+       List<Authors> list = new ArrayList<>();
        Settings settings = new Settings();
        int result;
        
@@ -70,7 +71,16 @@ public class DbServer implements IDbService{
                                                 settings.getValue(Settings.PSW));){
            
             Statement stm = connection.createStatement();
-            if(stm.execute("SELECT ID = " + author.getAuthor_id()+" FROM AUTHORS")) 
+            ResultSet rs = stm.executeQuery("SELECT * FROM AUTHORS WHERE ID = " + author.getAuthor_id());
+            Authors authorTemp = null;
+            while (rs.next()) {
+                author = new Authors(
+                        rs.getInt(1), 
+                        rs.getString(2), 
+                        rs.getString(3));
+                list.add(authorTemp);
+            }
+            if(!list.isEmpty())
                 throw new DocumentException("Author ID is not uniq");
             else{
                 String sql = "INSERT INTO authors VALUES ("+author.getAuthor_id()+",'"+author.getAuthor()+"','"+author.getNotes()+"')";
@@ -85,6 +95,7 @@ public class DbServer implements IDbService{
 
     @Override
     public boolean addDocument(Documents doc, Authors author) throws DocumentException {
+       List<Documents> list = new ArrayList<>();
        Settings settings = new Settings();
        int result;
        
@@ -94,16 +105,28 @@ public class DbServer implements IDbService{
                                                 settings.getValue(Settings.PSW));){
            
             Statement stm = connection.createStatement();
-            if(stm.execute("SELECT * FROM DOCUMENTS WHERE IDDOC = "+doc.getDocument_id())) 
+            ResultSet rs = stm.executeQuery("SELECT * FROM DOCUMENTS WHERE IDDOC = " + doc.getDocument_id());
+            Documents docTemp = null;
+            while (rs.next()) {
+                docTemp = new Documents(
+                        rs.getInt(1), 
+                        rs.getString(2), 
+                        rs.getString(3), 
+                        rs.getString(4), 
+                        rs.getInt(5));
+                list.add(docTemp);
+            }
+            
+            if(!list.isEmpty())
                 throw new DocumentException("Document ID is not uniq");
             else{
                 String sql = "INSERT INTO DOCUMENTS VALUES ("+doc.getDocument_id()+",'"
                         +doc.getTitle()+"','"
                         +doc.getText()+"','"
-                        +doc.getDate()+"','"
-                        +doc.getAuthor_id()+"')";
-                result = stm.executeUpdate(sql);}
-            return result>0;
+                        +doc.getDate()+"',"
+                        +doc.getAuthor_id()+")";
+             stm.executeUpdate(sql);}
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(Authors.class.getName()).log(Level.SEVERE, null, ex);
             return false;
