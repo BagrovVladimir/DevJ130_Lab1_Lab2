@@ -17,16 +17,12 @@ import java.util.logging.Logger;
 public class Documents {
     
     public static final int VERSION = 267384;
-    private final int document_id;
+    private Authors author;
+    private int document_id;
     private String title;
     private String text;
     private String date;
     private int author_id;
-
-//    public Documents(int document_id, String title, String text, int author_id) {
-//        this(document_id, title, text,
-//                new Date(System.currentTimeMillis()), author_id);
-//    }
 
     public Documents(int document_id, String title, String text, String date, int author_id) {
         this.document_id = document_id;
